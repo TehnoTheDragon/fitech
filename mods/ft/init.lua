@@ -30,6 +30,7 @@ end
 function ft.log(...)
     minetest.log(ft.vargs_to_message(...))
 end
+print = ft.log
 
 function ft.namespace(namespace, ...)
     local namespace = namespace:gsub("%s+", "_"):lower()
