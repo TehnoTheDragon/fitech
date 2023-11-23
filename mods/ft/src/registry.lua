@@ -11,6 +11,11 @@ end
 
 local Registries = {}
 
+function Registries._custom(type, fn)
+    assert(type ~= "_custom", "_custom is reserved function and cannot be used as registry type!")
+    Registries[type] = Registry(fn, type)
+end
+
 Registries.ITEM = Registry(function(name, data)
     
 end, "item")
