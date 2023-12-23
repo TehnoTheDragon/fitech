@@ -28,5 +28,5 @@ machine:tag("soft", 3)
 machine:register("rawr")
 print(machine)
 
-local RecipeType = ft.recipe.
-local Recipe
+print(dump(ft.registered_recipe_types))
+print(dump(ft.registered_recipes))
