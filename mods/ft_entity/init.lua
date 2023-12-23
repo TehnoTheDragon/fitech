@@ -1,7 +1,7 @@
 _G.ft_entity = {}
 
-ft_entity.entitytype = ft.mod_load("entitytype.lua")
-ft_entity.entity = ft.mod_load("entity.lua")
+ft_entity.entitytype = ft.mod_load("src/entitytype.lua")
+ft_entity.entity = ft.mod_load("src/entity.lua")
 
 -- Entity Registry
 local Registry = ft.registry
