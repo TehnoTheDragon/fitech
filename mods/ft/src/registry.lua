@@ -91,4 +91,28 @@ Registries.DECORATION = Registry(function(name, data)
     
 end, "decoration")
 
+Registries.RECIPE_TYPE = Registry(function(name, data)
+    local def = {}
+
+    def.validate = data._validate
+    def.transform = data._transform
+
+    ft.registered_recipe_types[name] = def
+    ft.registered_recipes[name] = {}
+
+    data._name = name
+end)
+Registries.RECIPE = Registry(function(name, data)
+    local recipeType = ft.registered_recipe_types[data.type]
+    assert(recipeType ~= nil, ("No recipe type `%s` was found"):format(data.type))
+
+    local valid, message = recipeType.validate(data.recipe, name, data.type)
+    assert(valid, message or ("Invalid recipe: `%s` for recipe-type: `%s`"):format(name, data.type))
+    local def = recipeType.transform(data.recipe)
+
+    ft.registered_recipes[data.type][name] = def
+
+    data._name = name
+end)
+
 return Registries
