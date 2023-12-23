@@ -1,0 +1,20 @@
+local formspec = ft_ui.formspec
+
+local inventoryFormspec = formspec()
+    :formspec_version(6)
+    :size({10, 7})
+    :bgcolor("#111a")
+    :container({0.025, 0})
+        :style_type("list", {size={0.95, 0.95}, spacing={0.05, 0.05}})
+        :listcolors("#1115", "#2225", "#444f")
+        :list("current_player", "craft", {5, 0.5}, {3, 3}, 0)
+        :list("current_player", "craftpreview", {8.5, 1.5}, {3, 3}, 0)
+        :list("current_player", "main", {0, 4}, {10, 3}, 0)
+    :container_end()
+
+minetest.register_on_joinplayer(function(player)
+    player:set_inventory_formspec(inventoryFormspec:get()) 
+    player:hud_set_hotbar_itemcount(10)
+    player:hud_set_hotbar_image("hotbar.png")
+    player:hud_set_hotbar_selected_image("selected.png")
+end)
