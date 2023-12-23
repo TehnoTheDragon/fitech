@@ -87,8 +87,16 @@ function ft.bulk_load(container, rootpath)
 end
 
 local function _preload()
+    ft.registered_recipe_types = {}
+    ft.registered_recipes = {}
+
     _G.class = ft.mod_load("vendors/nex/nex.lua")
+end
+
+local function _afterload()
+    ft.mod_load("afterload/minetest_recipes_2_ft_recipes.lua")
 end
 
 _preload()
 ft.bulk_load(ft, ft.mod_path_get("src"))
+_afterload()
