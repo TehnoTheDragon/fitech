@@ -1,0 +1,6 @@
+[Test]
+fitech_bool (Boolean) bool false
+fitech_int (Integer) int 1 10
+fitech_float (Float) float 0 100
+fitech_string (String) string hello, world!
+fitech_enum (Enum) enum none none,red,green,blue
