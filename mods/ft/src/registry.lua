@@ -17,7 +17,34 @@ function Registries._custom(type, fn)
 end
 
 Registries.ITEM = Registry(function(name, data)
-    
+    local def = {}
+
+    def.description = data.description
+    def.inventory_image = data.texture
+    def.groups = data.tags
+
+    for i, callbacks in pairs(data.events) do
+        def[i] = function(...)
+            for _, callback in pairs(callbacks) do
+                callback(...)
+            end
+        end
+    end
+    for i, v in pairs(data.props) do def[i] = v end
+
+    local instance
+
+    if data.is_tool then
+        instance = minetest.register_tool(name, def)
+    else
+        instance = minetest.register_craftitem(name, def)
+    end
+
+    data._instance = instance
+    data._identity = minetest.get_content_id(name)
+    data._name = name
+
+    return instance
 end, "item")
 
 Registries.BLOCK = Registry(function(name, data)
@@ -27,8 +54,14 @@ Registries.BLOCK = Registry(function(name, data)
     def.tiles = type(data.textures) == "table" and data.textures or {data.textures}
     def.groups = data.tags
 
-    for i,v in pairs(data.events) do def[i] = v end
-    for i,v in pairs(data.props) do def[i] = v end
+    for i, callbacks in pairs(data.events) do
+        def[i] = function(...)
+            for _, callback in pairs(callbacks) do
+                callback(...)
+            end
+        end
+    end
+    for i, v in pairs(data.props) do def[i] = v end
 
     local instance = minetest.register_node(name, def)
 
