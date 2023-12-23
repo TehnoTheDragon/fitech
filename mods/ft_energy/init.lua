@@ -27,8 +27,8 @@ function ft_energy.exchange(from, to, units)
     return to_units * units
 end
 
-ft_energy.energytype = ft.mod_load("energytype.lua")
-ft_energy.energy = ft.mod_load("energy.lua")
+ft_energy.energytype = ft.mod_load("src/energytype.lua")
+ft_energy.energy = ft.mod_load("src/energy.lua")
 
 -- Energy Registry
 local Registry = ft.registry
