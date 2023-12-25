@@ -41,7 +41,7 @@ Registries.ITEM = Registry(function(name, data)
     end
 
     data._instance = instance
-    data._identity = minetest.get_content_id(name)
+    data._identity = minetest.registered_items[name]
     data._name = name
 
     return instance
