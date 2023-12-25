@@ -8,7 +8,7 @@ local ignore_table = {
 }
 
 local function can_modify_tooltip(name, definition)
-    return ignore_table[name] == nil and definition.description:len() > 0
+    return ignore_table[name] == nil and definition.description:len() > 0 and definition._rttoff ~= true
 end
 
 local function modify_tooltips()
