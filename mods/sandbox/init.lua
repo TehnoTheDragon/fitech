@@ -1,4 +1,5 @@
 local Block = ft.block
+local Item = ft.item
 local formspec = ft_ui.formspec
 
 local machine = Block()
@@ -28,5 +29,11 @@ machine:tag("soft", 3)
 machine:register("rawr")
 print(machine)
 
-print(dump(ft.registered_recipe_types))
-print(dump(ft.registered_recipes))
+-- print(dump(ft.registered_recipe_types))
+-- print(dump(ft.registered_recipes))
+
+local circuit = Item()
+circuit.description = [[Circuit
+<color=#ff00ff>Hello <color=#ffff00>World!]]
+circuit.texture = "circuit_0.png"
+circuit:register("circuit")
