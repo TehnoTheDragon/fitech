@@ -95,6 +95,7 @@ end
 
 local function _afterload()
     ft.mod_load("afterload/minetest_recipes_2_ft_recipes.lua")
+    ft.mod_load("afterload/rich_tooltip.lua")
 end
 
 _preload()
