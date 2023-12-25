@@ -1,6 +1,6 @@
 local Item = class "Item" {}
 
-function Item:init(name)
+function Item:init()
     self.description = ""
     self.texture = "NaN.png"
     self.is_tool = false
@@ -10,7 +10,7 @@ function Item:init(name)
 
     self._instance = nil
     self._identity = nil
-    self._name = name
+    self._name = nil
 end
 
 function Item:__tostring()

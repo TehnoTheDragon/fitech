@@ -1,6 +1,6 @@
 local Block = class "Block" {}
 
-function Block:init(name)
+function Block:init()
     self.description = ""
     self.textures = "NaN.png"
     self.events = {}
@@ -9,7 +9,7 @@ function Block:init(name)
 
     self._instance = nil
     self._identity = nil
-    self._name = name
+    self._name = nil
 end
 
 function Block:__tostring()
