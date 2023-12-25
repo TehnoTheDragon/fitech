@@ -12,13 +12,13 @@ local function create_tree_wood_type(name, light, dark, plankColor)
         "log_side.png^[multiply:"..dark
     }
     log_block.description = name.." Log"
-    log_block:tag("soft", 2)
+    log_block:tag("soft", 3)
     log_block:register(name:lower().."_log")
 
     local planks_block = Block()
     planks_block.textures = "planks.png^[multiply:"..plankColor
     planks_block.description = name.." Planks"
-    planks_block:tag("soft", 2)
+    planks_block:tag("soft", 3)
     planks_block:register(name:lower().."_planks")
 end
 
@@ -66,7 +66,7 @@ tall_grass:prop("drawtype", "plantlike")
 tall_grass:tag("soft", 3)
 tall_grass:register("tall_grass")
 
--- Test
+-- Test Biome
 
 local Biome = ft.biome
 
