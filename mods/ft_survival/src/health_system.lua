@@ -1,7 +1,7 @@
 local hud = ft_ui.hud
 
 local function update_health_bar(player, custom)
-    hud(player, "ft_survival:health_bar").number = player:get_hp()
+    hud(player, "ft_survival:health_bar").number = custom or player:get_hp()
 end
 
 minetest.register_on_joinplayer(function(player)
