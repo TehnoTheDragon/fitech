@@ -1,25 +1,55 @@
 local Block = ft.block
 local Registries = ft.registry
 
-local function create_tree_wood_type(name, light, dark, plankColor)
+local function create_tree_wood_type(name, def)
+    local top = def.top or "log_top.png"
+    local side = def.side or "log_side.png"
+    local planks = def.planks or "planks.png"
+    local light = def.light
+    local dark = def.dark
+    local tint = def.tint
+
+    local top_texture = top.."^[multiply:"..light
+    local side_texture = side.."^[multiply:"..dark
+
     local log_block = Block()
-    log_block.textures = {
-        "log_top.png^[multiply:"..light,
-        "log_top.png^[multiply:"..light,
-        "log_side.png^[multiply:"..dark,
-        "log_side.png^[multiply:"..dark,
-        "log_side.png^[multiply:"..dark,
-        "log_side.png^[multiply:"..dark
-    }
+    log_block.textures = { top, top, side, side, side, side }
     log_block.description = name.." Log"
     log_block:tag("soft", 3)
-    log_block:register(name:lower().."_log")
+    log_block:register(name.."_log")
 
     local planks_block = Block()
-    planks_block.textures = "planks.png^[multiply:"..plankColor
+    planks_block.textures = planks.."^[multiply:"..tint
     planks_block.description = name.." Planks"
     planks_block:tag("soft", 3)
-    planks_block:register(name:lower().."_planks")
+    planks_block:register(name.."_planks")
+end
+
+local function create_flora(name, texture)
+    local flora = Block()
+    flora.textures = texture
+    flora.description = name
+    flora:prop("walkable", false)
+    flora:prop("buildable_to", true)
+    flora:prop("paramtype", "light")
+    flora:prop("sunlight_propagates", true)
+    flora:prop("drawtype", "plantlike")
+    flora:prop("waving", math.random(0, 3))
+    flora:tag("soft", 3)
+    flora:register(name)
+end
+
+local function create_detail(name, texture)
+    local detail = Block()
+    detail.textures = texture
+    detail.description = name
+    detail:prop("walkable", false)
+    detail:prop("buildable_to", false)
+    detail:prop("paramtype", "light")
+    detail:prop("sunlight_propagates", true)
+    detail:prop("drawtype", "plantlike")
+    detail:tag("soft", 3)
+    detail:register(name)
 end
 
 -- Solid Blocks
@@ -50,21 +80,25 @@ grass_block.description = "Grass"
 grass_block:tag("soft", 3)
 grass_block:register("grass")
 
-create_tree_wood_type("Oak", "#CCA352", "#665229", "#B38F47")
-create_tree_wood_type("Birch", "#b3b3b3", "#b3b3b3", "#a1a1a1")
+create_tree_wood_type("Oak", {
+    light="#CCA352",
+    dark="#665229",
+    tint="#B38F47"
+})
+create_tree_wood_type("Birch", {
+    light="#b3b3b3",
+    dark="#b3b3b3",
+    tint="#a1a1a1"
+})
 
 -- Flora
 
-local tall_grass = Block()
-tall_grass.textures = "tall_grass.png^[multiply:#0ff03a"
-tall_grass.description = "Tall Grass"
-tall_grass:prop("walkable", false)
-tall_grass:prop("buildable_to", true)
-tall_grass:prop("paramtype", "light")
-tall_grass:prop("sunlight_propagates", true)
-tall_grass:prop("drawtype", "plantlike")
-tall_grass:tag("soft", 3)
-tall_grass:register("tall_grass")
+create_flora("Tall Grass", "tall_grass.png^[multiply:#0ff03a")
+create_flora("Red Flower", "red_flower.png")
+
+-- Details
+
+create_detail("Small Rock", "small_rock.png")
 
 -- Test Biome
 
