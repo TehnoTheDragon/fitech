@@ -34,7 +34,7 @@ local function create_flora(name, texture)
     flora:prop("paramtype", "light")
     flora:prop("sunlight_propagates", true)
     flora:prop("drawtype", "plantlike")
-    flora:prop("waving", math.random(0, 3))
+    flora:prop("waving", math.random(1, 3))
     flora:tag("soft", 3)
     flora:register(name)
 end
