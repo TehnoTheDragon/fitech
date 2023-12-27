@@ -37,3 +37,9 @@ circuit.description = [[Circuit
 <color=#ff00ff>Hello <color=#ffff00>World!]]
 circuit.texture = "circuit_0.png"
 circuit:register("circuit")
+
+local iron_ingot = Item()
+iron_ingot.description = [[iron_ingot
+<color=#242f24>0.8kg]]
+iron_ingot.texture = "metal_ingot_2.png"
+iron_ingot:register("iron_ingot")
