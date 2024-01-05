@@ -1,3 +1,3 @@
-# fitech nature
-adds blocks like grass, stone and wood  
-adds flora like flowers and tall grass
+# fitech terra
+changes world generation code
+adds ability to create own world generation presents with json format
