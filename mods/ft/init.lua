@@ -93,11 +93,27 @@ function ft.mod_path_get(path)
     return ("%s/%s"):format(minetest.get_modpath(minetest.get_current_modname()), path)
 end
 
-function ft.read_file(path)
-    local file = io.open(path, "r")
+function ft.read_file(path, mode)
+    local file = io.open(path, mode or "r")
     local content = file:read('a')
     file:close()
     return content
+end
+
+function ft.write_file(path, mode, content)
+    local file = io.open(path, mode or "w")
+    file:write(content)
+    file:flush()
+    file:close()
+end
+
+function ft.is_file_exist(path)
+    local file = io.open(path)
+    if file == nil then
+        return false
+    end
+    file:close()
+    return true
 end
 
 function ft.bulk_load(container, rootpath)
