@@ -1,0 +1,53 @@
+{
+    "plugins": [
+        "example"
+    ],
+
+    "keys": {
+        "air": "air",
+        "stone": "mapgen_stone",
+        "dirt": "ft_nature:block_dirt",
+        "grass": "ft_nature:block_grass"
+    },
+
+    "noises": {
+        "terrain_noise": {
+            "definition": {
+                "offset": 0.0,
+                "scale": 1.0,
+                "spread": [ 72, 45, 72 ],
+                "seed": 576834,
+                "octaves": 5,
+                "persistence": 0.7,
+                "lacunarity": 1.5,
+                "flags": "eased"
+            }
+        }
+    },
+
+    "assembly": [
+        {
+            "type": "set",
+            "name": "var",
+            "value": 103
+        },
+        {
+            "type": "div",
+            "a": "$var",
+            "b": 3
+        },
+        {
+            "type": "floor",
+            "value": "$var"
+        },
+        {
+            "type": "cos",
+            "value": "$var"
+        },
+        {
+            "type": "call",
+            "method": "@example:my_method",
+            "args": ["$var"]
+        }
+    ]
+}
