@@ -28,21 +28,8 @@
     "assembly": [
         {
             "type": "set",
-            "name": "var",
+            "name": "$var",
             "value": 103
-        },
-        {
-            "type": "div",
-            "a": "$var",
-            "b": 3
-        },
-        {
-            "type": "floor",
-            "value": "$var"
-        },
-        {
-            "type": "cos",
-            "value": "$var"
         },
         {
             "type": "call",
