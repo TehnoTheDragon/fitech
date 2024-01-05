@@ -1,5 +1,33 @@
+local function create_config()
+    local settings = minetest.settings
+    local config = {}
+
+    function config:get(key, orValue)
+        return settings:get(key) or orValue
+    end
+
+    function config:boolean(key, orValue)
+        return settings:get_bool(key, orValue)
+    end
+
+    function config:noise(key, orValue)
+        return settings:get_np_group(key) or orValue
+    end
+
+    function config:get_flags(key)
+        return settings:get_flags(key)
+    end
+
+    function config:table()
+        return settings:to_table()
+    end
+
+    return config
+end
+
 _G.ft = {}
 
+ft.config = create_config()
 ft.mod_name = minetest.get_current_modname
 ft.world_path = minetest.get_worldpath
 function ft.vargs_to_message(...)
@@ -63,6 +91,13 @@ end
 
 function ft.mod_path_get(path)
     return ("%s/%s"):format(minetest.get_modpath(minetest.get_current_modname()), path)
+end
+
+function ft.read_file(path)
+    local file = io.open(path, "r")
+    local content = file:read('a')
+    file:close()
+    return content
 end
 
 function ft.bulk_load(container, rootpath)
