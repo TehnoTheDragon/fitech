@@ -11,33 +11,33 @@ local Assembly = ft.mod_load("src/assembly.lua")
 local Present = {}
 Present.__index = Present
 
-local terrain_noise = {
-    offset = 0.5,
-    scale = 1.0,
-    spread = { x = 72, y = 46, z = 72 },
-    seed = 576834,
-    octaves = 5,
-    persistence = 0.7,
-    lacunarity = 1.5,
-    flags = "eased"
-}
+-- local terrain_noise = {
+--     offset = 0.5,
+--     scale = 1.0,
+--     spread = { x = 72, y = 46, z = 72 },
+--     seed = 576834,
+--     octaves = 5,
+--     persistence = 0.7,
+--     lacunarity = 1.5,
+--     flags = "eased"
+-- }
 
 function Present:generate(gen)
-    local c_stone = minetest.get_content_id("mapgen_stone")
-    local tnm = gen.get_perlin_map_3d(terrain_noise)
+    -- local c_stone = minetest.get_content_id("mapgen_stone")
+    -- local tnm = gen.get_perlin_map_3d(terrain_noise)
     
-    gen.mapping(function(x, y, z, vid, xslice)
-        local gpos = gen.globali(vid)
+    -- gen.mapping(function(x, y, z, vid, xslice)
+    --     local gpos = gen.globali(vid)
 
-        if tnm[xslice] ^ 1.05 + gen.gradient(y, 32) >= 0 then
-            gen.set(vid, c_stone)
-        end
-    end)
+    --     if tnm[xslice] ^ 1.05 + gen.gradient(y, 32) >= 0 then
+    --         gen.set(vid, c_stone)
+    --     end
+    -- end)
 
-    gen.mark_dirty()
+    -- gen.mark_dirty()
 end
 
-return function(present_definition_table)
+return function(filename, present_definition_table)
     if present_definition_table.plugins then
         ftt.load_plugins(present_definition_table.plugins)
     end
@@ -45,7 +45,7 @@ return function(present_definition_table)
     local self = {}
     self.keys = parse_keys(present_definition_table.keys)
     self.noises = present_definition_table.noises
-    self.assembly = Assembly(present_definition_table.assembly)
+    self.assembly = Assembly(filename, present_definition_table.assembly)
 
     self.assembly()
 
