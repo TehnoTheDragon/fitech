@@ -99,18 +99,3 @@ create_flora("Red Flower", "red_flower.png")
 -- Details
 
 create_detail("Small Rock", "small_rock.png")
-
--- Test Biome
-
-local Biome = ft.biome
-
-local plains_biome = Biome({
-    node_top = grass_block:name(),
-    depth_top = 1,
-    node_filler = dirt_block:name(),
-    depth_filler = 3,
-    y_max = 31000,
-    y_min = -10
-}):register("plains")
-
-ft.log(stone_block, dirt_block, grass_block, tall_grass, plains_biome)
