@@ -1,7 +1,13 @@
 local hud = ft_ui.hud
+local ensure = ft.ensure
 
-local function update_health_bar(player, custom)
-    hud(player, "ft_survival:health_bar").number = custom or player:get_hp()
+local function update_health_bar(player)
+    ensure(hud(player, "ft_survival:health_bar"), function(health_bar)
+        local current = player:get_hp()
+        local nominal = 20
+        local max_display = math.max(nominal, current)
+        health_bar.number = math.ceil(current / max_display * nominal)
+    end)
 end
 
 minetest.register_on_joinplayer(function(player)
@@ -26,10 +32,4 @@ minetest.register_on_joinplayer(function(player)
     })
 end)
 
-minetest.register_on_player_hpchange(function(player, hp)
-    update_health_bar(player, player:get_hp() - math.max(math.abs(hp), 0))
-end)
-
-minetest.register_on_respawnplayer(function(player)
-    update_health_bar(player)
-end)
+minetest.register_playerevent(update_health_bar)

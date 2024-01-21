@@ -1,8 +1,14 @@
 local hud = ft_ui.hud
+local ensure = ft.ensure
 
 local function update_hunger_bar(player)
-    local meta = player:get_meta()
-    hud(player, "ft_survival:hunger_bar").number = meta:get_int("hunger")
+    ensure(hud(player, "ft_survival:hunger_bar"), function(hunger_bar)
+        local meta = player:get_meta()
+        local current = meta:get_int("hunger")
+        local nominal = 20
+        local max_display = math.max(nominal, current)
+        hunger_bar.number = math.ceil(current / max_display * nominal)
+    end)
 end
 
 minetest.register_on_joinplayer(function(player)
