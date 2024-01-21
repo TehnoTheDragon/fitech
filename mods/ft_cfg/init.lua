@@ -97,9 +97,12 @@ local function create_workspace_interface(path)
     function interface:request_read_file(name, format, mode)
         assert(type(name) == "string" and type(format) == "string" and (type(mode) == "string" or mode == nil))
         local f = ie_io.open(path .. name .. "." .. format, mode or "r")
-        local c = f:read("a")
-        f:close()
-        return c
+        if f ~= nil then
+            local c = f:read("a")
+            f:close()
+            return c
+        end
+        return nil
     end
 
     function interface:request_list()
@@ -122,6 +125,10 @@ local function create_workspace_interface(path)
         assert(type(name) == "string")
         create_folder(path .. name)
         return create_workspace_interface(path .. name .. "\\")
+    end
+
+    function interface:get_path()
+        return path
     end
 
     return setmetatable(interface, {__index = interface, __newindex = function() end})
