@@ -9,6 +9,8 @@ local ie_ffi = ie.require("ffi")
 local ie_buffer = ie.require("string.buffer")
 
 local ie_buffer_new = ie_buffer.new
+local ie_ffi_cast = ie_ffi.cast
+local ie_ffi_new = ie_ffi.new
 
 local function _buffer(size)
     size = size or 1024
@@ -42,9 +44,18 @@ local function _buffer(size)
     return self
 end
 
+local function _new(ctype, init)
+    return ie_ffi_new(ctype, init)
+end
+
+local function _cast(toctype, fromctype, value)
+    return ie_ffi.cast(toctype, _new(fromctype, value))
+end
+
 ie_buffer = nil
 ie_ffi = nil
 ie = nil
 
 _G.ft_extra = {}
 _G.ft_extra.buffer = _buffer
+_G.ft_extra.cast = _cast
