@@ -11,43 +11,50 @@ local Assembly = ft.mod_load("src/assembly.lua")
 local Present = {}
 Present.__index = Present
 
--- local terrain_noise = {
---     offset = 0.5,
---     scale = 1.0,
---     spread = { x = 72, y = 46, z = 72 },
---     seed = 576834,
---     octaves = 5,
---     persistence = 0.7,
---     lacunarity = 1.5,
---     flags = "eased"
--- }
-
 function Present:generate(gen)
-    -- local c_stone = minetest.get_content_id("mapgen_stone")
-    -- local tnm = gen.get_perlin_map_3d(terrain_noise)
-    
-    -- gen.mapping(function(x, y, z, vid, xslice)
-    --     local gpos = gen.globali(vid)
+    -- local memory = {}
 
-    --     if tnm[xslice] ^ 1.05 + gen.gradient(y, 32) >= 0 then
-    --         gen.set(vid, c_stone)
+    -- for k, v in pairs(self.noises) do
+    --     if v.type == "3d" then
+    --         memory[k] = gen.get_perlin_map_3d(v.definition)
+    --     elseif v.type == "2d" then
+    --         memory[k] = gen.get_perlin_map_2d(v.definition)
     --     end
-    -- end)
+    -- end
+
+    -- for k, v in pairs(self.keys) do
+    --     memory[k] = v
+    -- end
+
+    -- for k, v in pairs(self.data) do
+    --     memory[k] = v
+    -- end
+
+    -- memory.gen = gen
+
+    -- self.assembly(memory)
 
     -- gen.mark_dirty()
 end
 
-return function(filename, present_definition_table)
-    if present_definition_table.plugins then
-        ftt.load_plugins(present_definition_table.plugins)
-    end
+return function(filename, PDT)
+    PDT.noises = PDT.noises or {}
+    PDT.data = PDT.data or {}
 
     local self = {}
-    self.keys = parse_keys(present_definition_table.keys)
-    self.noises = present_definition_table.noises
-    self.assembly = Assembly(filename, present_definition_table.assembly)
-
-    self.assembly()
+    self.noises = PDT.noises
+    self.data = PDT.data
+    self.assembly = Assembly(filename, PDT.assembly)
+    
+    minetest.register_on_mods_loaded(function()
+        self.keys = parse_keys(PDT.keys)
+        if PDT.plugins then
+            ftt.load_plugins(PDT.plugins)
+            for _, plugin in pairs(ftt.plugins) do
+                plugin.post_init(PDT)
+            end
+        end
+    end)
 
     return setmetatable(self, Present)
 end
