@@ -39,6 +39,7 @@ local function parse_arguments(arguments, memory)
     end
 
     local args = {}
+
     for _, value in pairs(arguments) do
         if is_variable(value) then
             table.insert(args, parse_variable(value, memory))
@@ -46,6 +47,7 @@ local function parse_arguments(arguments, memory)
             table.insert(args, value)
         end
     end
+
     return args
 end
 
@@ -159,15 +161,16 @@ local function compile_assembly(filename, instructions)
             if tail[1] ~= nil then
                 append(SHORT_TYPE.array, GLUE_CODE)
                 for _, v in pairs(tail) do
-                    append(SHORT_TYPE[type(v)], v, TERMINATOR_CODE)
+                    append(SHORT_TYPE[type(v)], v, NULL_CODE)
                 end
             else
                 append(SHORT_TYPE.table, GLUE_CODE)
                 for k, v in pairs(tail) do
-                    append(k, GLUE_CODE, SHORT_TYPE[type(v)], v, TERMINATOR_CODE)
+                    append(k, GLUE_CODE, SHORT_TYPE[type(v)], v, NULL_CODE)
                 end
             end
 
+            append(TERMINATOR_CODE)
             goto exit
         end
 
@@ -191,7 +194,7 @@ local function compile_assembly(filename, instructions)
         append(TERMINATOR_CODE, NULL_CODE, TERMINATOR_CODE)
     end
 
-    ft.write_file(PRESENTS_PATH.."/"..filename..".bin", "wb", output)
+    -- ft.write_file(PRESENTS_PATH.."/"..filename..".bin", "wb", output)
     return output
 end
 
@@ -241,17 +244,20 @@ local function execute_program(memory, program)
             if argc == 3 or argc == 4 then
                 local key = argv[1]
                 local table_type = argv[2]
+                local table_value = string.split(argv[3], NULL_CODE)
+                local table_count = #table_value
                 local T = {}
+
                 if table_type == SHORT_TYPE.array then
-                    local I = 3
-                    while I <= argc do
-                        T[I - 2] = parse_binary_value(argv[I])
+                    local I = 1
+                    while I <= table_count do
+                        T[I] = parse_binary_value(table_value[I])
                         I = I + 1
                     end
                 else
-                    local I = 3
-                    while I <= argc do
-                        T[argv[I]] = parse_binary_value(argv[I + 1])
+                    local I = 1
+                    while I <= table_count do
+                        T[argv[I]] = parse_binary_value(table_value[I + 1])
                         I = I + 2
                     end
                 end
@@ -286,6 +292,7 @@ return function(filename, assembly)
 
     return function(init_memory)
         local memory = init_memory or {}
+        memory["$mem"] = memory
         execute_program(memory, assembly)
     end
 end
