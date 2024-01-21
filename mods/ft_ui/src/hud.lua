@@ -1,6 +1,20 @@
+local _INITED = false
+
 local HUDs = {}
 local element = {}
 element.__index = element
+
+if not _INITED then
+    _INITED = true
+    minetest.register_on_leaveplayer(function(player)
+        local player_hud_storage = HUDs[player]
+        if player_hud_storage then
+            for _, elem in pairs(player_hud_storage) do
+                elem:destroy()
+            end
+        end
+    end)
+end
 
 function element.new(player, definition)
     if not HUDs[player] then
