@@ -69,10 +69,16 @@ local function create_gen_object(pmin, pmax, emin, emax, seed, vm)
         data[index] = id
     end
 
+    function gen.get(index)
+        return data[index]
+    end
+
     function gen.for2d(fn)
-        for x = pmin.x, pmax.x do
-            for z = pmin.z, pmax.z do
-                fn(x, z)
+        local xslice = 1
+        for z = pmin.z, pmax.z do
+            for x = pmin.x, pmax.x do
+                fn(x, z, xslice)
+                xslice = xslice + 1
             end
         end
     end
@@ -115,8 +121,4 @@ local function create_gen_object(pmin, pmax, emin, emax, seed, vm)
     return gen
 end
 
-minetest.register_on_generated(function(pmin, pmax, seed)
-    local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
-    local gen = create_gen_object(pmin, pmax, emin, emax, seed, vm)
-    ftt.pipeline(gen)
-end)
+ftt.create_gen = create_gen_object
