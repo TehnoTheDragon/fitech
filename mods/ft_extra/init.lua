@@ -20,6 +20,10 @@ local function _buffer(size)
 
     local self = {}
 
+    function self:load(str)
+        buf:set(str)
+    end
+
     function self:put(...)
         buf:put(...)
     end
