@@ -1,8 +1,3 @@
-local psm = {
-    tokenizer = ft.mod_load("src/psm/tokenizer.lua"),
-    parser = ft.mod_load("src/psm/parser.lua")
-}
-
 local graph = {}
 
 function graph.new(kind, data)
@@ -237,16 +232,20 @@ function preprocs:plugin(graph)
     })
 end
 
-function preprocs:assembly(graph)
+function preprocs:lua(graph)
     self:require("(") self:eat()
     self:require("str", "kind")
     local source = self:eat().data
     self:require(")") self:eat()
 
-    local ast = psm.parser(psm.tokenizer(source)):parse()
-    assert(false, dump(ast))
+    local fn = loadstring(source)
+    setfenv(fn, {
+        print = _G.print
+    })
     
-    return graph.new("null")
+    return graph.new("lua", {
+        fn = fn
+    })
 end
 
 return parser.new

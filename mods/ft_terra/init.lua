@@ -56,6 +56,7 @@ end
 
 local tokenizer = ft.mod_load("src/wpl/tokenizer.lua")
 local parser = ft.mod_load("src/wpl/parser.lua")
+local interpret = ft.mod_load("src/wpl/interpreter.lua")
 
 local SUCCESS, PRESENT_CONTENT = pcall(function()
     return terra_presents:request_read_file(PRESENT_SELECTED, "wpl")
@@ -63,6 +64,7 @@ end)
 assert(SUCCESS, ("Error during trying read `%s`! Probably the file is not exist anymore."):format(terra_presents:get_path() .. PRESENT_SELECTED .. ".wpl"))
 
 local ast = parser(tokenizer(PRESENT_CONTENT)):parse()
+local state = interpret(ast)
 
 ft.mod_load("src/gen.lua")
 
@@ -71,6 +73,18 @@ ft.mod_load("src/gen.lua")
 minetest.register_on_generated(function(pmin, pmax, seed)
     local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
     local gen = ftt.create_gen(pmin, pmax, emin, emax, seed, vm)
+
+    gen.mapping(function(x, y, z, vid, dt)
+        local gp = gen.globali(vid)
+        state.generator({
+            x = gp.x,
+            y = gp.y,
+            z = gp.z,
+        })
+        if state.set then
+            gen.set(vid, state.set)
+        end
+    end)
 
     -- gen.mapping(function(x, y, z, vid, dt)
     --     local gp = gen.globali(vid)
@@ -83,5 +97,5 @@ minetest.register_on_generated(function(pmin, pmax, seed)
     --     end
     -- end)
 
-    -- gen.mark_dirty()
+    gen.mark_dirty()
 end)
