@@ -240,7 +240,14 @@ function preprocs:lua(graph)
 
     local fn = loadstring(source)
     setfenv(fn, {
-        print = _G.print
+        print = print,
+        math = math,
+        noise = function(def)
+            local noise = minetest.get_perlin(def)
+            return function(x, y, z)
+                return z == nil and noise:get_2d({x = x, y = y}) or noise:get_3d({x = x, y = y, z = z})
+            end
+        end
     })
     
     return graph.new("lua", {

@@ -65,6 +65,7 @@ assert(SUCCESS, ("Error during trying read `%s`! Probably the file is not exist 
 
 local ast = parser(tokenizer(PRESENT_CONTENT)):parse()
 local state = interpret(ast)
+local compute = state.compute
 
 ft.mod_load("src/gen.lua")
 
@@ -76,26 +77,15 @@ minetest.register_on_generated(function(pmin, pmax, seed)
 
     gen.mapping(function(x, y, z, vid, dt)
         local gp = gen.globali(vid)
-        state.generator({
+        local result = compute.fragment({
             x = gp.x,
             y = gp.y,
             z = gp.z,
         })
-        if state.set then
-            gen.set(vid, state.set)
+        if result.set then
+            gen.set(vid, result.set)
         end
     end)
-
-    -- gen.mapping(function(x, y, z, vid, dt)
-    --     local gp = gen.globali(vid)
-    --     if gp.y <= 0 then
-    --         gen.set(vid, 2)
-    --     end
-    --     if gp.y >= 1 and gp.y <= math.ceil(math.cos(gp.x / 8) * 30) then
-    --         gen.set(vid, 3)
-    --         gen.set(vid + gen.ystride, 4)
-    --     end
-    -- end)
 
     gen.mark_dirty()
 end)

@@ -19,7 +19,16 @@ function visitor:compound(state)
 end
 
 function visitor:load_plugin(state)
-    
+    ftt.load_plugin(self.name)
+    local plugin_container = ftt.plugins[self.name]
+    local state_plugin = {}
+    for k,v in pairs(plugin_container.methods) do
+        state_plugin[k] = v
+    end
+    for k,v in pairs(plugin_container.constants) do
+        state_plugin[k] = v
+    end
+    state[self.name] = state_plugin
 end
 
 function visitor:defvar(state)
@@ -28,21 +37,22 @@ end
 
 function visitor:lua(state)
     local fEnv = getfenv(self.fn)
-    fEnv.math = math
-    local wpl = {}
-    fEnv.wpl = wpl
     for k,v in pairs(state) do
         fEnv[k] = v
     end
-    setfenv(self.fn, fEnv)
+    
     return function(data)
+        local wpl = {}
+        fEnv.wpl = wpl
+
         for k,v in pairs(data) do
             fEnv[k] = v
         end
+        setfenv(self.fn, fEnv)
+
         self.fn()
-        for k,v in pairs(wpl) do
-            state[k] = v
-        end
+        
+        return wpl
     end
 end
 
